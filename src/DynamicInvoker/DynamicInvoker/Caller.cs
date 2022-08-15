@@ -3,8 +3,14 @@ using System.Reflection.Emit;
 
 namespace DynamicInvoker;
 
+/// <summary>
+/// General delegate for generated methods.
+/// </summary>
 public delegate object? DynamicDelegate(object? @this, object?[] args);
 
+/// <summary>
+/// Wrapper class for methods with reflection.
+/// </summary>
 public abstract class Caller
 {
     /// <summary>

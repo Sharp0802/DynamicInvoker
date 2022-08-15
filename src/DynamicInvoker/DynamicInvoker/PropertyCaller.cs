@@ -2,15 +2,18 @@
 
 namespace DynamicInvoker;
 
+/// <summary>
+/// Wrapper class for properties with reflection.
+/// </summary>
 public class PropertyCaller : Caller
 {
     /// <summary>
-    /// Create dynamic wrapper for property
+    /// Create dynamic wrapper for property.
     /// </summary>
-    /// <param name="type"><see cref="System.Type"/> that contains <paramref name="property"/></param>
-    /// <param name="property">Specific property to wrap</param>
-    /// <returns>Wrapped <see cref="DynamicInvoker.PropertyCaller"/></returns>
-    /// <exception cref="ArgumentNullException"><paramref name="type"/> is null -or- <paramref name="property"/> is null</exception>
+    /// <param name="type"><see cref="System.Type"/> that contains <paramref name="property"/>.</param>
+    /// <param name="property">Specific property to wrap.</param>
+    /// <returns>Wrapped <see cref="DynamicInvoker.PropertyCaller"/>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="type"/> is null -or- <paramref name="property"/> is null.</exception>
     public static PropertyCaller Create(Type type, PropertyInfo property)
     {
         if (type is null)
@@ -34,6 +37,9 @@ public class PropertyCaller : Caller
         }
     }
 
+    /// <summary>
+    /// Get whether the value of this property can be set.
+    /// </summary>
     public bool CanWrite { get; }
     
     private DynamicDelegate Getter { get; }
