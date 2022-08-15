@@ -63,7 +63,7 @@ public class Caller
         {
             // box return value if return type is value type
             if (callee.ReturnType.IsValueType)
-                il.Emit(OpCodes.Box, typeof(object));
+                il.Emit(OpCodes.Box, callee.ReturnType);
             
             // return return value of callee
             il.Emit(OpCodes.Ret);
