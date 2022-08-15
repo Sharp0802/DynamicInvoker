@@ -7,6 +7,13 @@ public delegate object? DynamicDelegate(object? @this, object[] args);
 
 public abstract class Caller
 {
+    /// <summary>
+    /// Wrap <see cref="System.Reflection.MethodInfo"/> to <see cref="System.Reflection.Emit.DynamicMethod"/>
+    /// </summary>
+    /// <param name="callee">Specific <see cref="System.Reflection.MethodInfo"/> to wrap</param>
+    /// <param name="type">The <see cref="System.Type"/> that contains <paramref name="callee"/></param>
+    /// <returns>Wrapped <see cref="System.Reflection.Emit.DynamicMethod"/></returns>
+    /// <exception cref="ArgumentNullException"><paramref name="callee"/> is null -or- <paramref name="type"/> is null</exception>
     public static DynamicMethod CreateDynamicMethod(MethodInfo callee, Type type)
     {
         if (callee is null)
@@ -83,6 +90,11 @@ public abstract class Caller
         return method;
     }
 
+    /// <summary>
+    /// Wrap generated <see cref="System.Reflection.Emit.DynamicMethod"/> to <see cref="DynamicInvoker.DynamicDelegate"/>
+    /// </summary>
+    /// <param name="caller">Specific <see cref="System.Reflection.Emit.DynamicMethod"/> to wrap</param>
+    /// <returns>Wrapped <see cref="DynamicInvoker.DynamicDelegate"/></returns>
     public static DynamicDelegate CreateDelegate(DynamicMethod caller)
     {
         return (DynamicDelegate)caller.CreateDelegate(typeof(DynamicDelegate), null);
