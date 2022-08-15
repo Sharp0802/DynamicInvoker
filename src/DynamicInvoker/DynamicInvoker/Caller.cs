@@ -3,25 +3,36 @@ using System.Reflection.Emit;
 
 namespace DynamicInvoker;
 
-public static class Caller
+public class Caller
 {
-    private static DynamicMethod CreateDynamicMethod(MethodInfo callee)
+    public static DynamicMethod CreateDynamicMethod(MethodInfo callee, Type type)
     {
         var method = new DynamicMethod(
             Guid.NewGuid().ToString("N"),
+            MethodAttributes.Public | MethodAttributes.Static, 
+            CallingConventions.Standard,
             typeof(object),
-            new[] { typeof(object[]) /* object[] args */ })
-        {
-            InitLocals = false // DO NOT INIT VARIABLES IN .locals init
-        };
-        _ = method.DefineParameter(1, ParameterAttributes.None, "args"); // define parameter 'object[] args'
+            new[] { typeof(object), typeof(object[]) /* object[] args */ },
+            typeof(Caller).Module,
+            true);
 
-        var il = method.GetILGenerator(256);
+        _ = method.DefineParameter(1, ParameterAttributes.None, "target"); // define parameter 'object target'
+        _ = method.DefineParameter(2, ParameterAttributes.None, "args"); // define parameter 'object[] args'
 
-        _ = il.DeclareLocal(typeof(object)); // .locals init [0]
+        var il = method.GetILGenerator();
         
         if (!callee.IsStatic) // if callee is instance method
-            il.Emit(OpCodes.Ldarg_0); // load this (target)
+        {
+            if (type.IsValueType)
+            {
+                il.Emit(OpCodes.Ldarga_S, (short)0); // load this (target)
+            }
+            else
+            {
+                il.Emit(OpCodes.Ldarg_0); // load this (target)
+                il.Emit(OpCodes.Castclass, type);
+            }
+        }
         
         var parameters = callee.GetParameters();
         for (var i = 0; i < parameters.Length; ++i)
@@ -44,8 +55,8 @@ public static class Caller
 
         if (callee.ReturnType == typeof(void))
         {
-            // return uninitialized value
-            il.Emit(OpCodes.Ldloc_0);
+            // return null
+            il.Emit(OpCodes.Ldnull);
             il.Emit(OpCodes.Ret);
         }
         else
