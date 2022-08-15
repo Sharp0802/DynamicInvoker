@@ -23,7 +23,7 @@ public static class Caller
         if (!callee.IsStatic) // if callee is instance method
             il.Emit(OpCodes.Ldarg_0); // load this (target)
         
-        var parameters = method.GetParameters();
+        var parameters = callee.GetParameters();
         for (var i = 0; i < parameters.Length; ++i)
         {
             // push args[i] onto stack
