@@ -3,6 +3,8 @@ using System.Reflection.Emit;
 
 namespace DynamicInvoker;
 
+public delegate object? DynamicDelegate(object? @this, object[] args);
+
 public abstract class Caller
 {
     public static DynamicMethod CreateDynamicMethod(MethodInfo callee, Type type)
@@ -70,5 +72,10 @@ public abstract class Caller
         }
 
         return method;
+    }
+
+    public static DynamicDelegate CreateDelegate(DynamicMethod caller)
+    {
+        return (DynamicDelegate) caller.CreateDelegate(typeof(DynamicDelegate), null);
     }
 }
