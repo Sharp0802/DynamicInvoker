@@ -3,7 +3,7 @@ using System.Reflection.Emit;
 
 namespace DynamicInvoker;
 
-public class Caller
+public abstract class Caller
 {
     public static DynamicMethod CreateDynamicMethod(MethodInfo callee, Type type)
     {
