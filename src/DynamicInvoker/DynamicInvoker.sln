@@ -1,16 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicInvoker", "DynamicInvoker\DynamicInvoker.csproj", "{D2FB62BA-06CF-428F-801A-35F6021C1B0F}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32708.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicInvoker", "DynamicInvoker\DynamicInvoker.csproj", "{D2FB62BA-06CF-428F-801A-35F6021C1B0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D2FB62BA-06CF-428F-801A-35F6021C1B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2FB62BA-06CF-428F-801A-35F6021C1B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2FB62BA-06CF-428F-801A-35F6021C1B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2FB62BA-06CF-428F-801A-35F6021C1B0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2FB62BA-06CF-428F-801A-35F6021C1B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2FB62BA-06CF-428F-801A-35F6021C1B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA883EAC-1B83-4229-A2A8-E672F18FD11C}
 	EndGlobalSection
 EndGlobal
