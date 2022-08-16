@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace DynamicInvoker;
 
@@ -13,7 +14,11 @@ public class ConstructorCaller : Caller
     /// <param name="type">The type that contains specific .ctor.</param>
     /// <param name="args"></param>
     /// <returns></returns>
-    public static ConstructorCaller Create(Type type, Type[] args)
+    public static ConstructorCaller Create(
+#if NET6_0
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+#endif
+        Type type, Type[] args)
     {
         return new ConstructorCaller(type, args);
     }

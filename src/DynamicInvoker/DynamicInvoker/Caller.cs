@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Reflection.Emit;
 
 namespace DynamicInvoker;
@@ -20,7 +21,12 @@ public abstract class Caller
     /// <param name="type">The <see cref="System.Type"/> that contains <paramref name="callee"/>.</param>
     /// <returns>Wrapped <see cref="System.Reflection.Emit.DynamicMethod"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="callee"/> is null -or- <paramref name="type"/> is null.</exception>
-    public static DynamicMethod CreateDynamicMethod(MethodInfo callee, Type type)
+    public static DynamicMethod CreateDynamicMethod(
+        MethodInfo callee,
+#if NET6_0
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+#endif
+        Type type)
     {
         if (callee is null)
             throw new ArgumentNullException(nameof(callee));
@@ -103,7 +109,12 @@ public abstract class Caller
     /// <param name="type">The <see cref="System.Type"/> that contains <paramref name="callee"/>.</param>
     /// <returns>Wrapped <see cref="System.Reflection.Emit.DynamicMethod"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="callee"/> is null -or- <paramref name="type"/> is null.</exception>
-    public static DynamicMethod CreateDynamicMethod(ConstructorInfo callee, Type type)
+    public static DynamicMethod CreateDynamicMethod(
+        ConstructorInfo callee,
+#if NET6_0
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+#endif
+        Type type)
     {
         if (callee is null)
             throw new ArgumentNullException(nameof(callee));
@@ -125,7 +136,7 @@ public abstract class Caller
 
         _ = method.DefineParameter(1, ParameterAttributes.None, "target"); // define parameter 'object target'
         _ = method.DefineParameter(2, ParameterAttributes.None, "args"); // define parameter 'object[] args'
-        
+
         var il = method.GetILGenerator();
 
         var parameters = callee.GetParameters();
@@ -135,14 +146,14 @@ public abstract class Caller
             il.Emit(OpCodes.Ldarg_1);
             il.Emit(OpCodes.Ldc_I4, i);
             il.Emit(OpCodes.Ldelem_Ref);
-            
+
             // cast args[i] to parameter type
             var paramT = parameters[i].ParameterType;
             il.Emit(paramT.IsValueType ? OpCodes.Unbox_Any : OpCodes.Castclass, paramT); // cast to parameter type
         }
-        
+
         il.Emit(OpCodes.Newobj, callee);
-        
+
         // box return value if return type is value type
         if (type.IsValueType)
             il.Emit(OpCodes.Box, type);

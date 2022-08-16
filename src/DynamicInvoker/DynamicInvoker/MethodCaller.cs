@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace DynamicInvoker;
 
@@ -12,7 +13,12 @@ public class MethodCaller : Caller
     /// </summary>
     /// <param name="type"><see cref="System.Type"/> that contains <paramref name="method"/></param>
     /// <param name="method">Specific <see cref="System.Reflection.MethodInfo"/> to wrap.</param>
-    public static MethodCaller Create(Type type, MethodInfo method)
+    public static MethodCaller Create(
+#if NET6_0
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+#endif
+        Type type, 
+        MethodInfo method)
     {
         return new MethodCaller(method, type);
     }

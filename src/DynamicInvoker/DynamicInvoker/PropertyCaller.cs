@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace DynamicInvoker;
 
@@ -14,7 +15,12 @@ public class PropertyCaller : Caller
     /// <param name="property">Specific <see cref="PropertyInfo"/> to wrap.</param>
     /// <returns>Wrapped <see cref="DynamicInvoker.PropertyCaller"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="type"/> is null -or- <paramref name="property"/> is null.</exception>
-    public static PropertyCaller Create(Type type, PropertyInfo property)
+    public static PropertyCaller Create(
+#if NET6_0
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+#endif
+        Type type, 
+        PropertyInfo property)
     {
         if (type is null)
             throw new ArgumentNullException(nameof(type));
