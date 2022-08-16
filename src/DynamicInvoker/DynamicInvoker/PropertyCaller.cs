@@ -11,7 +11,7 @@ public class PropertyCaller : Caller
     /// Create dynamic wrapper for property.
     /// </summary>
     /// <param name="type"><see cref="System.Type"/> that contains <paramref name="property"/>.</param>
-    /// <param name="property">Specific property to wrap.</param>
+    /// <param name="property">Specific <see cref="PropertyInfo"/> to wrap.</param>
     /// <returns>Wrapped <see cref="DynamicInvoker.PropertyCaller"/>.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="type"/> is null -or- <paramref name="property"/> is null.</exception>
     public static PropertyCaller Create(Type type, PropertyInfo property)
