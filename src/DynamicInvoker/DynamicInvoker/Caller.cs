@@ -96,6 +96,54 @@ public abstract class Caller
         return method;
     }
 
+    public static DynamicMethod CreateDynamicMethod(ConstructorInfo callee, Type type)
+    {
+        if (callee is null)
+            throw new ArgumentNullException(nameof(callee));
+        if (type is null)
+            throw new ArgumentNullException(nameof(type));
+
+        var method = new DynamicMethod(
+            Guid.NewGuid().ToString("N"),
+            MethodAttributes.Public | MethodAttributes.Static,
+            CallingConventions.Standard,
+            typeof(object),
+            new[]
+            {
+                typeof(object), // object? target = null
+                typeof(object[]) // object[] args
+            },
+            typeof(Caller).Module,
+            true);
+
+        _ = method.DefineParameter(1, ParameterAttributes.None, "target"); // define parameter 'object target'
+        _ = method.DefineParameter(2, ParameterAttributes.None, "args"); // define parameter 'object[] args'
+        
+        var il = method.GetILGenerator();
+
+        var parameters = callee.GetParameters();
+        for (var i = 0; i < parameters.Length; ++i)
+        {
+            // push args[i] onto stack
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldc_I4, i);
+            il.Emit(OpCodes.Ldelem_Ref);
+            
+            // cast args[i] to parameter type
+            var paramT = parameters[i].ParameterType;
+            il.Emit(paramT.IsValueType ? OpCodes.Unbox_Any : OpCodes.Castclass, paramT); // cast to parameter type
+        }
+        
+        il.Emit(OpCodes.Newobj, callee);
+        
+        // box return value if return type is value type
+        if (type.IsValueType)
+            il.Emit(OpCodes.Box, type);
+        il.Emit(OpCodes.Ret);
+
+        return method;
+    }
+
     /// <summary>
     /// Wrap generated <see cref="System.Reflection.Emit.DynamicMethod"/> to <see cref="DynamicInvoker.DynamicDelegate"/>.
     /// </summary>
