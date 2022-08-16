@@ -96,6 +96,13 @@ public abstract class Caller
         return method;
     }
 
+    /// <summary>
+    /// Wrap <see cref="System.Reflection.ConstructorInfo"/> to <see cref="System.Reflection.Emit.DynamicMethod"/>.
+    /// </summary>
+    /// <param name="callee">Specific <see cref="System.Reflection.ConstructorInfo"/> to wrap.</param>
+    /// <param name="type">The <see cref="System.Type"/> that contains <paramref name="callee"/>.</param>
+    /// <returns>Wrapped <see cref="System.Reflection.Emit.DynamicMethod"/>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="callee"/> is null -or- <paramref name="type"/> is null.</exception>
     public static DynamicMethod CreateDynamicMethod(ConstructorInfo callee, Type type)
     {
         if (callee is null)
