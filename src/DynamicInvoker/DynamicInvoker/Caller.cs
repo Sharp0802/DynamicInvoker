@@ -1,6 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
+
+#if NET6_0
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace DynamicInvoker;
 
