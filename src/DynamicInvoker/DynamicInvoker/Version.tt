@@ -1,0 +1,30 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".props"#>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#
+    var file = Host.ResolvePath("Version.props");
+    Console.WriteLine(file);
+    if (File.Exists(file))
+    {
+        var xml = File.ReadAllText(file);
+        var regex = new Regex(@"<Version>(?<major>\d+)[.](?<minor>\d+)[.](?<build>\d+)<\/Version>");
+        var match = regex.Match(xml);
+
+        _major = Convert.ToInt32(match.Groups["major"].Value);
+        _minor = Convert.ToInt32(match.Groups["minor"].Value);
+        _build = Convert.ToInt32(match.Groups["build"].Value) + 1;
+    }
+#>
+
+<Project>
+    <PropertyGroup>
+        <Version><#= _major #>.<#= _minor #>.<#= _build #></Version>
+    </PropertyGroup>
+</Project>
+
+<#+
+    private int _major = 1;
+    private int _minor = 0;
+    private int _build = 0;
+#>

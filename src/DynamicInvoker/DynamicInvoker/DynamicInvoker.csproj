@@ -1,5 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v17.0\TextTemplating\Microsoft.TextTemplating.targets" />
+    <Import Project="Version.props" />
+
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
         <LangVersion>10.0</LangVersion>
@@ -8,13 +11,15 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Deterministic>false</Deterministic>
+        <TransformOnBuild>true</TransformOnBuild>
+        <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
     </PropertyGroup>
     
     <PropertyGroup>
-        <AssemblyVersion>1.0.0.$([System.DateTime]::UtcNow.ToString(mmff))</AssemblyVersion>
-        
         <PackageId>DynamicInvoker</PackageId>
-        <PackageVersion>$(AssemblyVersion)</PackageVersion>
+        <PackageVersion>$(Version)</PackageVersion>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <FileVersion>$(Version)</FileVersion>
         <Authors>Sharp0802</Authors>
         <Description>
             This reflection library provides more efficient way than MethodInfo.Invoke to invoke method dynamically.
@@ -28,6 +33,15 @@
     
     <ItemGroup>
         <None Include="../../../README.md" Pack="true" PackagePath="/" />
+        <None Update="Version.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>Version.props</LastGenOutput>
+        </None>
+        <None Update="Version.props">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>Version.tt</DependentUpon>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
