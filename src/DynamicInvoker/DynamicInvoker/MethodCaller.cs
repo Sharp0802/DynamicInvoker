@@ -35,10 +35,17 @@ public class MethodCaller : Caller
     private DynamicDelegate Delegate { get; }
     
     /// <summary>
-    /// Call the method.
+    /// Call the instance method.
     /// </summary>
     /// <param name="target">Instance that contains this method.</param>
     /// <param name="args">The arguments of method.</param>
     /// <returns>If return type of the method is <see cref="System.Void"/>, null. otherwise, return value of the method.</returns>
     public object? Call(TypedReference target, params object?[] args) => Delegate.Invoke(target, args);
+    
+    /// <summary>
+    /// Call the static method.
+    /// </summary>
+    /// <param name="args">The arguments of method.</param>
+    /// <returns>If return type of the method is <see cref="System.Void"/>, null. otherwise, return value of the method.</returns>
+    public object? Call(params object?[] args) => Call(__makeref(Dummy), args);
 }
