@@ -27,13 +27,12 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <None Include="../../../README.md" Pack="true" PackagePath="/"/>
+        <None Include="../../../README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
       <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
-      <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="7.0.0-preview.2.22152.2" />
     </ItemGroup>
 
 </Project>
