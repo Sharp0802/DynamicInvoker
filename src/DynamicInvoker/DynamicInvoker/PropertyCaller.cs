@@ -31,24 +31,31 @@ public class PropertyCaller : Caller
     
     private PropertyCaller(Type type, PropertyInfo property)
     {
+        CanRead = property.CanRead;
         CanWrite = property.CanWrite;
-        
-        var getter = property.GetGetMethod();
-        Getter = CreateDelegate(CreateDynamicMethod(getter, type));
+
+        if (CanRead)
+        {
+            var getter = property.GetGetMethod();
+            Getter = CreateDelegate(CreateDynamicMethod(getter!, type));
+        }
         
         if (CanWrite)
         {
             var setter = property.GetSetMethod();
-            Setter = CreateDelegate(CreateDynamicMethod(setter, type));
+            Setter = CreateDelegate(CreateDynamicMethod(setter!, type));
         }
     }
-
+    
+    
+    public bool CanRead { get; }
+    
     /// <summary>
     /// Get whether the value of this property can be set.
     /// </summary>
     public bool CanWrite { get; }
     
-    private DynamicDelegate Getter { get; }
+    private DynamicDelegate? Getter { get; }
     private DynamicDelegate? Setter { get; }
 
     /// <summary>
@@ -59,7 +66,10 @@ public class PropertyCaller : Caller
     /// <exception cref="ArgumentNullException"><paramref name="instance"/> is null.</exception>
     public object? Get(TypedReference instance)
     {
-        return Getter.Invoke(instance, Array.Empty<object>());
+        if (CanRead)
+            return Getter!.Invoke(instance, Array.Empty<object>());
+        else
+            throw new InvalidOperationException("the property is write-only.");
     }
 
     /// <summary>
