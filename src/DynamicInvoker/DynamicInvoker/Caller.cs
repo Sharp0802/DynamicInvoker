@@ -17,6 +17,15 @@ public delegate object? DynamicDelegate(TypedReference @this, object?[] args);
 /// </summary>
 public abstract class Caller
 {
+    private static object _dummy = new();
+    
+    /// <summary>
+    /// Gets a dummy object used to make dummy <see cref="System.TypedReference"/>.
+    /// DO NOT set value of this property.
+    /// </summary>
+    /// <returns>a dummy object used to make dummy <see cref="System.TypedReference"/>.</returns>
+    public static ref object Dummy => ref _dummy;
+
     /// <summary>
     /// Wrap <see cref="System.Reflection.MethodInfo"/> to <see cref="System.Reflection.Emit.DynamicMethod"/>.
     /// </summary>
