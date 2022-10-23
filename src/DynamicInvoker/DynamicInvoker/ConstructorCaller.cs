@@ -47,6 +47,6 @@ public class ConstructorCaller : Caller
     /// <returns>Initialized object.</returns>
     public object Call(object[] args)
     {
-        return Ctor.Invoke(null, args)!;
+        return Ctor.Invoke(__makeref(Const.Dummy), args)!;
     }
 }

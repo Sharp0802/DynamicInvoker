@@ -57,10 +57,8 @@ public class PropertyCaller : Caller
     /// <param name="instance">Instance that contains this property.</param>
     /// <returns>The value of property.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="instance"/> is null.</exception>
-    public object? Get(object instance)
+    public object? Get(TypedReference instance)
     {
-        if (instance is null)
-            throw new ArgumentNullException(nameof(instance));
         return Getter.Invoke(instance, Array.Empty<object>());
     }
 
@@ -71,10 +69,8 @@ public class PropertyCaller : Caller
     /// <param name="value">The value of property.</param>
     /// <exception cref="ArgumentNullException"><paramref name="instance"/> is null.</exception>
     /// <exception cref="InvalidOperationException">This property is read-only.</exception>
-    public void Set(object instance, object? value)
+    public void Set(TypedReference instance, object? value)
     {
-        if (instance is null)
-            throw new ArgumentNullException(nameof(instance));
         if (CanWrite)
             Setter!.Invoke(instance, new[] { value });
         else
