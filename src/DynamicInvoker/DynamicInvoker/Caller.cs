@@ -7,7 +7,7 @@ namespace DynamicInvoker;
 /// <summary>
 /// General delegate for generated methods.
 /// </summary>
-public delegate object? DynamicDelegate(object? @this, object?[] args);
+public delegate object? DynamicDelegate(TypedReference @this, object?[] args);
 
 /// <summary>
 /// Wrapper class for methods with reflection.
@@ -40,27 +40,26 @@ public abstract class Caller
             typeof(object),
             new[]
             {
-                typeof(object), // object? @this 
+                typeof(TypedReference), // typedref target
                 typeof(object[]) // object[] args
             },
             typeof(Caller).Module,
             true);
-
-        _ = method.DefineParameter(1, ParameterAttributes.None, "target"); // define parameter 'object target'
-        _ = method.DefineParameter(2, ParameterAttributes.None, "args"); // define parameter 'object[] args'
+        
+        _ = method.DefineParameter(1, ParameterAttributes.None, "target");
+        _ = method.DefineParameter(2, ParameterAttributes.None, "args");
 
         var il = method.GetILGenerator();
 
         if (!callee.IsStatic) // if callee is instance method
         {
-            if (type.IsValueType)
+            // (void*) &target
+            il.Emit(OpCodes.Ldarg_0);
+            il.Emit(OpCodes.Refanyval, type);
+
+            if (!type.IsValueType)
             {
-                il.Emit(OpCodes.Ldarga_S, (short)0); // load this (target)
-            }
-            else
-            {
-                il.Emit(OpCodes.Ldarg_0); // load this (target)
-                il.Emit(OpCodes.Castclass, type);
+                il.Emit(OpCodes.Ldind_Ref);
             }
         }
 
@@ -128,14 +127,14 @@ public abstract class Caller
             typeof(object),
             new[]
             {
-                typeof(object), // object? target = null
+                typeof(TypedReference), // void* target
                 typeof(object[]) // object[] args
             },
             typeof(Caller).Module,
             true);
 
-        _ = method.DefineParameter(1, ParameterAttributes.None, "target"); // define parameter 'object target'
-        _ = method.DefineParameter(2, ParameterAttributes.None, "args"); // define parameter 'object[] args'
+        _ = method.DefineParameter(1, ParameterAttributes.None, "target");
+        _ = method.DefineParameter(2, ParameterAttributes.None, "args");
 
         var il = method.GetILGenerator();
 
