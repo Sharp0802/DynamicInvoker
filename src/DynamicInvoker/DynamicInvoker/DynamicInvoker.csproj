@@ -7,7 +7,28 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Deterministic>false</Deterministic>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <AssemblyVersion>1.0.0.$([System.DateTime]::UtcNow.ToString(mmff))</AssemblyVersion>
+        
+        <PackageId>DynamicInvoker</PackageId>
+        <PackageVersion>$(AssemblyVersion)</PackageVersion>
+        <Authors>Sharp0802</Authors>
+        <Description>
+            This reflection library provides more efficient way than MethodInfo.Invoke to invoke method dynamically.
+            Github - https://github.com/Sharp0802/DynamicInvoker
+        </Description>
+        <PackageProjectUrl>https://github.com/Sharp0802/DynamicInvoker</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>il;cil;msil;reflection;dynamic;optimization</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="../../../README.md" Pack="true" PackagePath="/"/>
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
