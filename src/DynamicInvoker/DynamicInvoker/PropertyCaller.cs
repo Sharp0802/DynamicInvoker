@@ -47,12 +47,10 @@ public class PropertyCaller : Caller
         }
     }
     
-    
+    /// <inheritdoc cref="PropertyInfo.CanRead"/>
     public bool CanRead { get; }
     
-    /// <summary>
-    /// Get whether the value of this property can be set.
-    /// </summary>
+    /// <inheritdoc cref="PropertyInfo.CanWrite"/>
     public bool CanWrite { get; }
     
     private DynamicDelegate? Getter { get; }
