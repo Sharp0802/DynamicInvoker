@@ -25,10 +25,8 @@ class Example
     }
 }
 
-var dynMethod = Caller.CreateDynamicMethod(typeof(Example).GetMethod("Foo"), typeof(Example));
-var caller = Caller.CreateDelegate(dynMethod);
-
-var res = caller.Invoke(null, new object[] { 0.1 });
+var caller = MethodCaller.Create(typeof(Example), typeof(Example).GetMethod("Foo")!);
+var res = caller.Call(1.0);
 ```
 
 ### Constructors
@@ -40,8 +38,7 @@ class Example
 }
 
 var caller = ConstructorCaller.Create(typeof(Example), new[] { typeof(int), typeof(int) });
-
-var example = caller.Call(new object[] { 1, 2 }); // construct one
+var res = caller.Call(1, 2); // construct one
 ```
 
 ### Properties
@@ -52,10 +49,10 @@ class Example
     public int Target { get; set; }
 }
 
+var caller = PropertyCaller.Create(typeof(Example), typeof(Example).GetProperty("Target")!);
+
 var target = new Example();
 
-var caller = PropertyCaller.Create(typeof(Example), typeof(Example).GetProperty("Target"));
-
-var value = caller.Get(target); // get value and store in variable
-caller.Set(target, value + 1); // set value to value of variable + 1
+var value = caller.Get(__makeref(target)); // get value and store in variable
+caller.Set(__makeref(target), value + 1); // set value to value of variable + 1
 ```
