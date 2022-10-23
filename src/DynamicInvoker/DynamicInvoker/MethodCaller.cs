@@ -40,5 +40,5 @@ public class MethodCaller : Caller
     /// <param name="target">Instance that contains this method.</param>
     /// <param name="args">The arguments of method.</param>
     /// <returns>If return type of the method is <see cref="System.Void"/>, null. otherwise, return value of the method.</returns>
-    public object? Call(TypedReference target, object?[] args) => Delegate.Invoke(target, args);
+    public object? Call(TypedReference target, params object?[] args) => Delegate.Invoke(target, args);
 }

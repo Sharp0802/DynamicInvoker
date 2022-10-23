@@ -48,7 +48,7 @@ public class ConstructorCaller : Caller
     /// </summary>
     /// <param name="args">Arguments of .ctor.</param>
     /// <returns>Initialized object.</returns>
-    public object Call(object[] args)
+    public object Call(params object[] args)
     {
         return Ctor.Invoke(__makeref(Const.Dummy), args)!;
     }
